@@ -7,6 +7,9 @@ import { TimeOffRequest } from './entities/timeoff.entity';
 import { TimeOffModule } from './timeoff/timeoff.module';
 import { HcmModule } from './hcm/hcm.module';
 
+import { AppController } from './app.controller'; 
+import { AppService } from './app.service';       
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -18,5 +21,7 @@ import { HcmModule } from './hcm/hcm.module';
     TimeOffModule,
     HcmModule,
   ],
+  controllers: [AppController],   
+  providers: [AppService],        
 })
 export class AppModule {}
