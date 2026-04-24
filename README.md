@@ -1,98 +1,240 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Time-Off Microservice
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A backend service built with NestJS to manage employee time-off requests while maintaining consistency with an external Human Capital Management (HCM) system.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Overview
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This service allows employees to request time off while ensuring that the **HCM system remains the source of truth** for balances. It handles validation, synchronization, and failure scenarios to maintain data integrity across systems.
 
-## Project setup
+---
 
-```bash
-$ npm install
+## Key Features
+
+* Time-off request lifecycle (PENDING → APPROVED / REJECTED)
+* Local balance validation for fast feedback
+* Real-time validation with HCM
+* Batch synchronization with HCM
+* Defensive error handling
+* DTO-based validation
+* Modular NestJS architecture
+
+---
+
+## Tech Stack
+
+* **Backend:** NestJS
+* **Database:** SQLite (TypeORM)
+* **Validation:** class-validator
+* **Testing:** Jest (basic setup)
+* **Language:** TypeScript
+
+---
+
+## Project Structure
+
+```
+src/
+  entities/
+    employee-balance.entity.ts
+    timeoff.entity.ts
+
+  hcm/
+    hcm.controller.ts
+    hcm.service.ts
+    hcm.module.ts
+
+  timeoff/
+    dto/
+      request-timeoff.dto.ts
+    timeoff.controller.ts
+    timeoff.service.ts
+    timeoff.module.ts
+
+  app.module.ts
+  main.ts
 ```
 
-## Compile and run the project
+---
+
+## Setup Instructions
+
+### 1. Clone the repository
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone <your-repo-url>
+cd timeoff-service
 ```
 
-## Run tests
+### 2. Install dependencies
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 3. Run the server
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Server runs at:
 
-## Resources
+```
+http://localhost:3000
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+---
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## API Endpoints
 
-## Support
+### TimeOff
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+#### Request Time Off
 
-## Stay in touch
+```
+POST /timeoff/request
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+**Body**
 
-## License
+```json
+{
+  "employeeId": "1",
+  "locationId": "A",
+  "days": 2
+}
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+
+#### Sync Balances
+
+```
+POST /timeoff/sync
+```
+
+---
+
+### HCM (Mock APIs)
+
+#### Get Balance
+
+```
+GET /hcm/balance?employeeId=1&locationId=A
+```
+
+---
+
+#### Deduct Balance
+
+```
+POST /hcm/deduct
+```
+
+**Body**
+
+```json
+{
+  "employeeId": "1",
+  "locationId": "A",
+  "days": 2
+}
+```
+
+---
+
+#### Batch Sync Data
+
+```
+GET /hcm/batch
+```
+
+---
+
+## How It Works
+
+1. Request is validated locally
+2. Local balance is checked
+3. Request is created as **PENDING**
+4. HCM is called for validation
+5. If successful:
+
+   * Balance updated
+   * Request marked **APPROVED**
+6. If failure:
+
+   * Request marked **REJECTED**
+
+---
+
+## Testing the System
+
+### Step 1 — Sync initial data
+
+```
+POST /timeoff/sync
+```
+
+---
+
+### Step 2 — Make a valid request
+
+```
+POST /timeoff/request
+```
+
+---
+
+### Step 3 — Test failure scenarios
+
+* Large request → insufficient balance
+* Invalid input → validation error
+* HCM rejection → simulated failure
+
+---
+
+## Design Decisions
+
+* **HCM as Source of Truth**
+  All final validations rely on HCM.
+
+* **Local Cache for Performance**
+  Improves response time for users.
+
+* **Batch Sync for Reconciliation**
+  Handles external updates like bonuses.
+
+* **PENDING State**
+  Prevents incorrect approvals.
+
+---
+
+## Limitations
+
+* No concurrency control (race conditions possible)
+* Mock HCM instead of real integration
+
+---
+
+## Future Improvements
+
+* Add DB transactions for consistency
+* Introduce retry queues (e.g., Bull)
+* Implement event-driven architecture
+* Add authentication & authorization
+* Integrate real HCM APIs
+
+---
+
+## Author
+
+Saad Ali Abbasi
+saadaliabbasi2347@gmail.com
+
+---
+
+## Final Note
+
+This project demonstrates handling of distributed data consistency problems using a pragmatic approach that balances performance with correctness.
