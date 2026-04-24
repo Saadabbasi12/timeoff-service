@@ -12,7 +12,7 @@ import { HcmService } from './hcm.service';
 export class HcmController {
   constructor(private readonly service: HcmService) {}
 
-  // ✅ GET should use query params
+ 
   @Get('balance')
   getBalance(
     @Query('employeeId') employeeId: string,
@@ -25,7 +25,7 @@ export class HcmController {
     return this.service.getBalance(employeeId, locationId);
   }
 
-  // ✅ POST uses body
+ 
   @Post('deduct')
   deduct(@Body() dto: any) {
      if (!dto) {
@@ -41,7 +41,7 @@ export class HcmController {
     return this.service.deductBalance(employeeId, locationId, days);
   }
 
-  // ✅ Batch endpoint
+  //  Batch endpoint
   @Get('batch')
   batch() {
     return this.service.batchSync();

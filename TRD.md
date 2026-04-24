@@ -379,6 +379,11 @@ POST /timeoff/request
 
 
 ## 8. Conclusion
+for test write : npm run test:e2e
+Test Suites: 1 passed, 1 total
+Tests:       8 passed, 8 total
+Snapshots:   0 total
+Time:        5.942 s
 
 This system ensures:
 

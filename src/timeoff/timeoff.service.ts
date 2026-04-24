@@ -22,11 +22,11 @@ export class TimeOffService {
     private readonly hcmService: HcmService,
   ) {}
 
-  // 🔥 MAIN BUSINESS LOGIC
+
   async requestTimeOff(dto: RequestTimeOffDto) {
     const { employeeId, locationId, days } = dto;
 
-    // 1️⃣ Fetch local balance
+  
     const balance = await this.balanceRepo.findOne({
       where: { employeeId, locationId },
     });
@@ -35,12 +35,12 @@ export class TimeOffService {
       throw new BadRequestException('Balance not found');
     }
 
-    // 2️⃣ Local validation
+   
     if (balance.balance < days) {
       throw new BadRequestException('Insufficient local balance');
     }
 
-    // 3️⃣ Create request as PENDING
+   
     let request = this.requestRepo.create({
       employeeId,
       locationId,
@@ -50,7 +50,7 @@ export class TimeOffService {
 
     request = await this.requestRepo.save(request);
 
-    // 4️⃣ Validate with HCM (external system)
+    // this code is to Validate with HCM (external system)
    try {
   await this.hcmService.deductBalance(employeeId, locationId, days);
 } catch (error: unknown) {
@@ -63,16 +63,16 @@ export class TimeOffService {
   throw new BadRequestException(errorMessage);
 }
 
-    // 5️⃣ Deduct locally
+    // this Deduct locally
     balance.balance -= days;
     await this.balanceRepo.save(balance);
 
-    // 6️⃣ Mark request as APPROVED
+   
     request.status = Status.APPROVED;
     return this.requestRepo.save(request);
   }
 
-  // 🔄 Batch sync with HCM
+  //  this code is to Batch sync with HCM
   async syncBalances() {
     const data = await this.hcmService.batchSync();
 
@@ -101,7 +101,7 @@ export class TimeOffService {
     return { message: 'Sync completed successfully' };
   }
 
-  // 📊 Optional: Get balance API support
+  // doing this for Optional: Get balance API support
   async getBalance(employeeId: string, locationId: string) {
     const balance = await this.balanceRepo.findOne({
       where: { employeeId, locationId },
