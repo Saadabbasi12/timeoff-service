@@ -1,24 +1,47 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Query,
+  BadRequestException,
+} from '@nestjs/common';
 import { HcmService } from './hcm.service';
 
 @Controller('hcm')
 export class HcmController {
   constructor(private readonly service: HcmService) {}
 
+  // ✅ GET should use query params
   @Get('balance')
-  getBalance(@Body() dto) {
-    return this.service.getBalance(dto.employeeId, dto.locationId);
+  getBalance(
+    @Query('employeeId') employeeId: string,
+    @Query('locationId') locationId: string,
+  ) {
+    if (!employeeId || !locationId) {
+      throw new BadRequestException('Missing parameters');
+    }
+
+    return this.service.getBalance(employeeId, locationId);
   }
 
+  // ✅ POST uses body
   @Post('deduct')
-  deduct(@Body() dto) {
-    return this.service.deductBalance(
-      dto.employeeId,
-      dto.locationId,
-      dto.days,
-    );
+  deduct(@Body() dto: any) {
+     if (!dto) {
+    throw new BadRequestException('Body missing');
+  }
+    const { employeeId, locationId, days } = dto;
+    
+
+    if (!employeeId || !locationId || !days) {
+      throw new BadRequestException('Invalid input');
+    }
+
+    return this.service.deductBalance(employeeId, locationId, days);
   }
 
+  // ✅ Batch endpoint
   @Get('batch')
   batch() {
     return this.service.batchSync();

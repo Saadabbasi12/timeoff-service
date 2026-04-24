@@ -17,6 +17,10 @@ export class HcmService {
     const key = this.getKey(employeeId, locationId);
     const current = await this.getBalance(employeeId, locationId);
 
+     if (days > 3) {
+      throw new BadRequestException('HCM rejected request');
+    }
+
     if (current < days) {
       throw new BadRequestException('HCM: Insufficient balance');
     }
